@@ -1,0 +1,48 @@
+string ledNombre= "Lucecita";
+string ledNombre1= "Lucecita1";
+string doorName = "HD_Door1";
+string sensor1 ="SP1";
+string sensor2 = "SP2";
+
+  
+
+public void Main()
+
+{
+var led = GridTerminalSystem.GetBlockWithName(ledNombre) as IMyInteriorLight;
+var led1 = GridTerminalSystem.GetBlockWithName(ledNombre1) as IMyInteriorLight;
+var s1 = GridTerminalSystem.GetBlockWithName(sensor1) as IMySensorBlock;
+var s2 = GridTerminalSystem.GetBlockWithName(sensor2) as IMySensorBlock;
+IMyBlockGroup group = GridTerminalSystem.GetBlockGroupWithName(doorName);     
+List<IMyTerminalBlock> puertas = new List<IMyTerminalBlock>();  
+group.GetBlocksOfType(puertas);
+for(int a=0;a<puertas.Count;a++){
+
+     var puerta = puertas[a] as IMyDoor;
+    if(puerta.Status== DoorStatus.Open){
+        led.SetValueFloat("Blink Interval", 2f);
+        led1.SetValueFloat("Blink Interval", 2f);
+        led.SetValue("Color", Color.Red);
+        led1.SetValue("Color", Color.Red);
+         if(s1.IsActive == false | s2.IsActive ==false ){
+          puerta.GetActionWithName("Open_Off").Apply(puerta);
+           }
+          else { 
+             led.SetValue("Color", Color.Yellow);
+             led1.SetValue("Color", Color.Yellow);
+           }
+        
+     }
+else {
+   led.SetValueFloat("Blink Interval", 0f);
+   led1.SetValueFloat("Blink Interval", 0f);
+   led.SetValue("Color", Color.Green);
+   led1.SetValue("Color", Color.Green);
+}
+
+
+}
+
+}
+ 
+
